@@ -1,30 +1,51 @@
 package org.example.objetos;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="Recetas")
 public class Recetas {
-    private int idPocion;
-    private int idIngrediente;
+    @EmbeddedId
+    private RecetasId id;
+
+    @MapsId("idPocion")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idPocion", nullable = false)
+    private Pociones pocion;
+
+    @MapsId("IdIngrediente")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "IdIngrediente", nullable = false)
+    private Ingredientes ingrediente;
+
+    @Column(name = "cantidad", nullable = false)
     private int cantidad;
 
-    public Recetas(int idPocion, int idIngrediente, int cantidad) {
-        this.idPocion = idPocion;
-        this.idIngrediente = idIngrediente;
+
+    // Constructor sin parámetros, necesario para Hibernate
+    public Recetas() {}
+
+    // Constructor con parámetros
+    public Recetas(Pociones pocion, Ingredientes ingrediente, int cantidad) {
+        this.pocion = pocion;
+        this.ingrediente = ingrediente;
         this.cantidad = cantidad;
     }
 
-    public int getIdPocion() {
-        return idPocion;
+    public Pociones getPocion() {
+        return pocion;
     }
 
-    public void setIdPocion(int idPocion) {
-        this.idPocion = idPocion;
+    public void setPocion(Pociones pocion) {
+        this.pocion = pocion;
     }
 
-    public int getIdIngrediente() {
-        return idIngrediente;
+    public Ingredientes getIngrediente() {
+        return ingrediente;
     }
 
-    public void setIdIngrediente(int idIngrediente) {
-        this.idIngrediente = idIngrediente;
+    public void setIngrediente(Ingredientes ingrediente) {
+        this.ingrediente = ingrediente;
     }
 
     public int getCantidad() {

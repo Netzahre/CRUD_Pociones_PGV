@@ -1,12 +1,25 @@
 package org.example.objetos;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Ingredientes")
 public class Ingredientes {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "IdIngrediente")
     private int idIngrediente;
+    @Column (name = "nombreIngrediente", nullable = false )
     private String nombreIngrediente;
+    @Enumerated(EnumType.STRING)
+    @Column (name = "tipoIngrediente", nullable = false)
     private TiposIngrediente tipoIngrediente;
 
-    public Ingredientes(int idIngrediente, String nombreIngrediente, TiposIngrediente tipoIngrediente) {
-        this.idIngrediente = idIngrediente;
+    public Ingredientes(){}
+
+    public Ingredientes(String nombreIngrediente, TiposIngrediente tipoIngrediente) {
         this.nombreIngrediente = nombreIngrediente;
         this.tipoIngrediente = tipoIngrediente;
     }
