@@ -11,8 +11,9 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0"
-            prefWidth="1280.0" style="-fx-background-color: #370d54;" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorVerDatos">
+            prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.cliente_pocionescrud.controladorVerDatos">
     <children>
         <ImageView fitHeight="1034.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -27,22 +28,6 @@
         </ImageView>
 
         <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0"/>
-        <HBox layoutX="89.0" layoutY="202.0" prefHeight="62.0" prefWidth="1103.0" spacing="600.0">
-            <children>
-                <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="251.0"
-                        style="-fx-background-color: #c68913;" text="Atras">
-                    <font>
-                        <Font name="System Bold" size="48.0"/>
-                    </font>
-                </Button>
-                <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="259.0"
-                        style="-fx-background-color: #c68913;" text="Añadir">
-                    <font>
-                        <Font name="System Bold" size="48.0"/>
-                    </font>
-                </Button>
-            </children>
-        </HBox>
         <TableView layoutX="-3.0" layoutY="321.0" prefHeight="703.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0"
                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="321.0">
             <columns>
@@ -50,5 +35,19 @@
                 <TableColumn prefWidth="75.0" text="C2"/>
             </columns>
         </TableView>
+        <HBox layoutX="90.0" layoutY="173.0" spacing="600.0">
+            <children>
+                <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="251.0" styleClass="boton" text="Atras" onAction="#volverAtras">
+                    <font>
+                        <Font name="System Bold" size="48.0"/>
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" prefHeight="102.0" prefWidth="251.0" styleClass="boton" text="Añadir" onAction="#crearPocion">
+                    <font>
+                        <Font name="System Bold" size="48.0"/>
+                    </font>
+                </Button>
+            </children>
+        </HBox>
     </children>
 </AnchorPane>

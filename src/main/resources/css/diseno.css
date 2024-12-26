@@ -1,0 +1,8 @@
+.boton {
+    -fx-background-color: #c68913;
+    -fx-text-fill: black;
+}
+
+.boton:hover {
+    -fx-background-color: #eab149;
+}

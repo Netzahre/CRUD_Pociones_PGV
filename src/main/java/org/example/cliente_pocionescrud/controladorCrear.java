@@ -6,35 +6,39 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class controladorAcceso {
+public class controladorCrear {
+    @FXML
+    protected void confirmarCrear(ActionEvent event) throws IOException {
+        //TODO implementar la logica de server y creacion de pociones
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verDatos.fxml"));
+        Parent nuevaVista = fxmlLoader.load();
+        // Cambiar el contenido de la escena actual
+        mostrarMensaje("Confirmar creacion", "¿Desea añadir la pocion?", Alert.AlertType.CONFIRMATION);
+        Scene escenaActual = ((Node) event.getSource()).getScene();
+        escenaActual.setRoot(nuevaVista);
+    }
 
     @FXML
-    protected void verPociones(ActionEvent event) throws IOException {
+    protected void atras(ActionEvent event) throws IOException {
         //TODO implementar la logica de server
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verDatos.fxml"));
         Parent nuevaVista = fxmlLoader.load();
         // Cambiar el contenido de la escena actual
+        mostrarMensaje("Confirmar cancelar", "¿Desea cancelar la creacion de la pocion?", Alert.AlertType.CONFIRMATION);
+
         Scene escenaActual = ((Node) event.getSource()).getScene();
         escenaActual.setRoot(nuevaVista);
     }
-
-    @FXML
-    protected void verEstadisticas(ActionEvent event) throws IOException {
-        //TODO implementar la logica de server
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verConsultas.fxml"));
-        Parent nuevaVista = fxmlLoader.load();
-        // Cambiar el contenido de la escena actual
-        Scene escenaActual = ((Node) event.getSource()).getScene();
-        escenaActual.setRoot(nuevaVista);
-    }
-
-    @FXML
-    protected void salir(ActionEvent event) throws IOException {
-        //TODO Cambiar de cerrar la app a desconectar del server y volver a la pantalla anterior
-        System.exit(0);
+    private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
