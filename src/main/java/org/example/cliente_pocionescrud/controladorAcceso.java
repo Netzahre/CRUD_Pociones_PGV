@@ -14,20 +14,16 @@ public class controladorAcceso {
 
     @FXML
     protected void verPociones(ActionEvent event) throws IOException {
-        //TODO implementar la logica de server
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verDatos.fxml"));
         Parent nuevaVista = fxmlLoader.load();
-        // Cambiar el contenido de la escena actual
         Scene escenaActual = ((Node) event.getSource()).getScene();
         escenaActual.setRoot(nuevaVista);
     }
 
     @FXML
     protected void verEstadisticas(ActionEvent event) throws IOException {
-        //TODO implementar la logica de server
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verConsultas.fxml"));
         Parent nuevaVista = fxmlLoader.load();
-        // Cambiar el contenido de la escena actual
         Scene escenaActual = ((Node) event.getSource()).getScene();
         escenaActual.setRoot(nuevaVista);
     }

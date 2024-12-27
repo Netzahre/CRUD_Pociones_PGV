@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -26,30 +28,30 @@
                 <Font name="System Bold" size="48.0" />
             </font>
         </Button>
-      <Label layoutX="140.0" layoutY="302.0" text="Ingredientes que se usan en más de 3 pociones diferentes (10)" textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="140.0" layoutY="366.0" text="Cantidad total de tipo de ingrediente utilizado (4-5 creo)" textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="135.0" layoutY="436.0" text="Pociones mas caras por tamaño(3)" textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="140.0" layoutY="512.0" text="top 10 pociones con mayor cantidad de ingredientes(10)" textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="135.0" layoutY="568.0" text="Pociones de cada escuela con su promedio de ingredientes utilizados:(10)" textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
+      <TableView fx:id="tablaingredientesmas3pociones" layoutX="49.0" layoutY="557.0" prefHeight="421.0" prefWidth="411.0">
+        <columns>
+          <TableColumn prefWidth="409.0" text="TOP 10 Ingredientes que se usan en más de 3 pociones diferentes" />
+        </columns>
+      </TableView>
+      <TableView fx:id="cantidadIngredientesEscuelas" layoutX="494.0" layoutY="557.0" prefHeight="421.0" prefWidth="348.0">
+         <columns>
+            <TableColumn prefWidth="345.0" text="Cantidad de ingredientes usados por cada escuela" />
+         </columns>
+      </TableView>
+      <TableView fx:id="top3PocionesCaras" layoutX="49.0" layoutY="351.0" prefHeight="186.0" prefWidth="411.0">
+         <columns>
+            <TableColumn prefWidth="409.0" text="Top 3 Pociones mas caras por tamaño" />
+         </columns>
+      </TableView>
+      <TableView fx:id="cantidadVecesIngrediente" layoutX="738.0" layoutY="296.0" prefHeight="216.0" prefWidth="448.0">
+         <columns>
+            <TableColumn prefWidth="409.0" text="Cantidad  de veces que se utiliza cada tipo de ingrediente" />
+         </columns>
+      </TableView>
+      <TableView fx:id="top10pocionesMuchosIngredientes" layoutX="926.0" layoutY="557.0" prefHeight="421.0" prefWidth="340.0">
+         <columns>
+            <TableColumn prefWidth="338.0" text="top 10 pociones con mayor cantidad de ingredientes" />
+         </columns>
+      </TableView>
     </children>
 </AnchorPane>

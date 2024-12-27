@@ -34,6 +34,7 @@ public class controladorConectar {
             escenaActual.setRoot(nuevaVista);
 
             mostrarMensaje("Conexion exitosa", "Usted se ha conectado con exito al servidor", Alert.AlertType.INFORMATION);
+
         } catch (IOException e) {
             mostrarMensaje("Conexion fallida", "Ha ocurrido un error al intentar acceder al servidor", Alert.AlertType.ERROR);
         }
