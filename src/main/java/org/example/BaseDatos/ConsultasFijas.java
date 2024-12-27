@@ -54,10 +54,10 @@ public class ConsultasFijas {
         return lista;
     }
 
-    //Pociones de cada escuela con su promedio de ingredientes utilizados:
+    //Pociones de cada escuela con su promedio de ingredientes utilizados
     public List<Pociones> PromedioDeIngredientesPorPocion(){
         Session sesion = HibernateUtil.getSessionFactory().openSession();
-        String query = "SELECT P.escuela, AVG(COUNT(R.ingrediente.idIngrediente)) AS promedio_ingredientes FROM Pociones P JOIN Recetas R ON P.idPocion = R.pocion.idPocion GROUP BY P.escuela";
+        String query = "SELECT P.escuela, COUNT(R.ingrediente) AS promedio_ingredientes FROM Pociones P JOIN Recetas R ON P.idPocion = R.pocion.idPocion GROUP BY P.escuela";
         Query query1 = sesion.createQuery(query);
         query1.setMaxResults(10);
         List<Pociones> lista = query1.list();

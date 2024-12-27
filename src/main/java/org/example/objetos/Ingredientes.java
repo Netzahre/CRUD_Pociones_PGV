@@ -3,6 +3,9 @@ package org.example.objetos;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "Ingredientes")
 public class Ingredientes {
@@ -11,13 +14,18 @@ public class Ingredientes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdIngrediente")
     private int idIngrediente;
-    @Column (name = "nombreIngrediente", nullable = false )
+    @Column(name = "nombreIngrediente", nullable = false)
     private String nombreIngrediente;
     @Enumerated(EnumType.STRING)
-    @Column (name = "tipoIngrediente", nullable = false)
+    @Column(name = "tipoIngrediente", nullable = false)
     private TiposIngrediente tipoIngrediente;
 
-    public Ingredientes(){}
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "ingrediente", fetch = FetchType.EAGER)
+    List<Recetas> receta = new ArrayList<>();
+
+    public Ingredientes() {
+    }
 
     public Ingredientes(String nombreIngrediente, TiposIngrediente tipoIngrediente) {
         this.nombreIngrediente = nombreIngrediente;
@@ -40,5 +48,7 @@ public class Ingredientes {
         this.nombreIngrediente = nombreIngrediente;
     }
 
-    public enum TiposIngrediente{VEGETAL,MINERAL,ORGANICO,MAGICO}
+    public enum TiposIngrediente {VEGETAL, MINERAL, ORGANICO, MAGICO}
+
+
 }

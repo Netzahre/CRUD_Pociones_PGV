@@ -9,12 +9,12 @@ public class Recetas {
     private RecetasId id;
 
     @MapsId("idPocion")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "idPocion", nullable = false)
     private Pociones pocion;
 
     @MapsId("IdIngrediente")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "IdIngrediente", nullable = false)
     private Ingredientes ingrediente;
 
@@ -30,6 +30,8 @@ public class Recetas {
         this.pocion = pocion;
         this.ingrediente = ingrediente;
         this.cantidad = cantidad;
+        // Inicializa el ID compuesto
+        this.id = new RecetasId(pocion.getIdPocion(), ingrediente.getIdIngrediente());
     }
 
     public Pociones getPocion() {
@@ -54,5 +56,13 @@ public class Recetas {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public RecetasId getId() {
+        return id;
+    }
+
+    public void setId(RecetasId id) {
+        this.id = id;
     }
 }

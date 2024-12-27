@@ -33,7 +33,7 @@ public class Pociones {
     @Column (name="tamanio",nullable = false)
     private Tamanio tamanio;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pocion", fetch = FetchType.EAGER)
     List<Recetas> receta = new ArrayList<>();
 
     public Pociones(){}
@@ -97,12 +97,15 @@ public class Pociones {
     public List<Recetas> getReceta() {
         return receta;
     }
+
     public void setReceta(List<Recetas> receta) {
         this.receta = receta;
     }
+
     public void addReceta(Recetas receta) {
         this.receta.add(receta);
     }
+
     public void removeReceta(Recetas receta) {
         this.receta.remove(receta);
     }

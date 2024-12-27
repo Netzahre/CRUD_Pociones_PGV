@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class RecetasId implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "idPocion")
@@ -13,6 +14,12 @@ public class RecetasId implements Serializable {
     @Column(name = "IdIngrediente")
     private int IdIngrediente;
 
+    public RecetasId() {}
+
+    public RecetasId(int idPocion, int idIngrediente) {
+        this.idPocion = idPocion;
+        this.IdIngrediente = idIngrediente;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -25,5 +32,21 @@ public class RecetasId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(idPocion, IdIngrediente);
+    }
+
+    public int getIdPocion() {
+        return idPocion;
+    }
+
+    public void setIdPocion(int idPocion) {
+        this.idPocion = idPocion;
+    }
+
+    public int getIdIngrediente() {
+        return IdIngrediente;
+    }
+
+    public void setIdIngrediente(int idIngrediente) {
+        IdIngrediente = idIngrediente;
     }
 }
