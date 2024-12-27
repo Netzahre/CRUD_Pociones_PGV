@@ -26,19 +26,19 @@ public class Main {
 //        }
         ConsultasFijas con = new ConsultasFijas();
 
-        List test = con.PromedioDeIngredientesPorPocion();
-//        for (Pociones pocion : con.PromedioDeIngredientesPorPocion()) {
-//            String escuela = pocion.getNombrePocion();  // Nombre de la escuela
-//
-//            System.out.println("Escuela: " + escuela);
-//
-//        }
 
-        for (Object linea : test) {
-            for (int i = 0; i < test.size(); i++) {
-                System.out.println(linea[i]);
-            }
+        List<Object[]> list = con.PromedioDeIngredientesPorPocion();
+        for (Object[] pocion : list) {
+            String escuela = ((Pociones.Escuela) pocion[0]).name().toLowerCase();
+            Long promedio = (Long) pocion[1];
+            System.out.println(escuela + " - " + promedio);
         }
+
+//        for (Object linea : test) {
+//            for (int i = 0; i < test.size(); i++) {
+//                System.out.println(linea[i]);
+//            }
+//        }
 
     }
 
