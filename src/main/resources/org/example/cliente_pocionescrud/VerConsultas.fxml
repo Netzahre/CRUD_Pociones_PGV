@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -27,10 +26,30 @@
                 <Font name="System Bold" size="48.0" />
             </font>
         </Button>
-        <ScrollPane layoutX="791.0" layoutY="349.0" prefHeight="628.0" prefWidth="407.0">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-            </content>
-        </ScrollPane>
+      <Label layoutX="140.0" layoutY="302.0" text="Ingredientes que se usan en más de 3 pociones diferentes (10)" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="140.0" layoutY="366.0" text="Cantidad total de tipo de ingrediente utilizado (4-5 creo)" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="135.0" layoutY="436.0" text="Pociones mas caras por tamaño(3)" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="140.0" layoutY="512.0" text="top 10 pociones con mayor cantidad de ingredientes(10)" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="135.0" layoutY="568.0" text="Pociones de cada escuela con su promedio de ingredientes utilizados:(10)" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
