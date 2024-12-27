@@ -36,6 +36,8 @@ public class Pociones {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pocion", fetch = FetchType.EAGER)
     List<Recetas> receta = new ArrayList<>();
 
+
+
     public Pociones(){}
 
     public Pociones(String nombrePocion, String efectoPocion, double precio, Escuela escuela, Tamanio tamanio) {
@@ -109,4 +111,11 @@ public class Pociones {
     public void removeReceta(Recetas receta) {
         this.receta.remove(receta);
     }
+
+    public String toStringo(){
+        return(nombrePocion +" - "+efectoPocion);
+    }
+
+
+
 }

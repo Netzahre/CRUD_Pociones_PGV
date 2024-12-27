@@ -12,7 +12,7 @@ public class Ingredientes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdIngrediente")
+    @Column(name = "idIngrediente")
     private int idIngrediente;
     @Column(name = "nombreIngrediente", nullable = false)
     private String nombreIngrediente;
