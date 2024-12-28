@@ -13,19 +13,21 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class controladorConectar {
-    @FXML
-    private AccederServidor accederServidor;
+    private static AccederServidor accederServidor;
 
+    public static AccederServidor getAccederServidor() {
+        return accederServidor;
+    }
 
     @FXML
     protected void Conectar(ActionEvent event) {
         try {
-//            accederServidor = new AccederServidor("localhost", 69);
-//            if (accederServidor.esServidorLleno()) {
-//                mostrarMensaje("Servidor lleno", "Actualmente el servidor está ocupado. Por favor, intente más tarde.", Alert.AlertType.WARNING);
-//                accederServidor.cerrarConexion();
-//                return;
-//            }
+            accederServidor = new AccederServidor("localhost", 69);
+            if (accederServidor.esServidorLleno()) {
+                mostrarMensaje("Servidor lleno", "Actualmente el servidor está ocupado. Por favor, intente más tarde.", Alert.AlertType.WARNING);
+                accederServidor.cerrarConexion();
+                return;
+            }
             // Cambiar a la nueva pantalla si la conexión fue exitosa
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("acceso.fxml"));
             Parent nuevaVista = fxmlLoader.load();

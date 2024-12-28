@@ -2,9 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -33,27 +32,22 @@
                 <Font name="System Bold" size="48.0" />
             </font>
         </Button>
-        <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="260.0" prefHeight="757.0" prefWidth="1098.0" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="260.0">
+        <VBox alignment="TOP_CENTER" layoutX="92.0" layoutY="259.0" prefHeight="739.0" prefWidth="1098.0" spacing="7.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="92.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="259.0">
             <children>
                 <TextField fx:id="NombrePocionTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" promptText="Nombre de la pocion" />
                 <TextField fx:id="EfectoPocionTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" promptText="Efecto de la pocion" />
-                <ListView fx:id="escuelaListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="650.0" />
-                <ListView fx:id="tamanoListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="650.0" />
-                <Label text="Precio" textFill="WHITE">
+            <ComboBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" />
+            <ComboBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" />
+            <TextField fx:id="precioPocion" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" promptText="Precio (Formato 100.00)" />
+                <Label prefHeight="26.0" prefWidth="329.0" text="Lista de ingredientes" textFill="WHITE">
                     <font>
                         <Font size="36.0" />
                     </font>
                 </Label>
-                <Spinner fx:id="precioSpinner" />
-                <Label text="Lista de ingredientes" textFill="WHITE">
-                    <font>
-                        <Font size="36.0" />
-                    </font>
-                </Label>
-                <TableView fx:id="tableViewIngredientes" editable="true" prefHeight="365.0" prefWidth="1098.0" tableMenuButtonVisible="true">
+                <TableView fx:id="tableViewIngredientes" editable="true" prefHeight="344.0" prefWidth="1098.0" tableMenuButtonVisible="true">
                     <columns>
-                        <TableColumn prefWidth="75.0" text="C1" />
-                        <TableColumn prefWidth="75.0" text="C2" />
+                        <TableColumn fx:id="ColumnaIngredientes" prefWidth="553.0" text="Ingrediente" />
+                        <TableColumn fx:id="ColumnaCantidad" minWidth="0.0" prefWidth="544.0" text="Cantidad" />
                     </columns>
                 </TableView>
             </children>

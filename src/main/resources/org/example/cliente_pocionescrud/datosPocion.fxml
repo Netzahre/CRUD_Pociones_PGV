@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorDatosPocion">
+<AnchorPane prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorDatosPocion">
     <children>
         <ImageView fitHeight="1034.0" fitWidth="1280.0" layoutX="-14.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -31,27 +26,27 @@
         </Button>
         <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="260.0" prefHeight="757.0" prefWidth="1098.0">
             <children>
-                <Label text="NombrePocion" textFill="WHITE">
+                <Label fx:id="labelNombre" text="NombrePocion" textFill="WHITE">
                     <font>
                         <Font size="48.0" />
                     </font>
                 </Label>
-                <Label text="Efecto" textFill="WHITE">
+                <Label fx:id="labelEfecto" text="Efecto" textFill="WHITE">
                     <font>
                         <Font size="36.0" />
                     </font>
                 </Label>
-                <Label text="Escuela" textFill="WHITE">
+                <Label fx:id="labelEscuela" text="Escuela" textFill="WHITE">
                     <font>
                         <Font size="36.0" />
                     </font>
                 </Label>
-                <Label text="Tamaño" textFill="WHITE">
+                <Label fx:id="labelTamanio" text="Tamaño" textFill="WHITE">
                     <font>
                         <Font size="36.0" />
                     </font>
                 </Label>
-                <Label text="Precio" textFill="WHITE">
+                <Label fx:id="labelPrecio" text="Precio" textFill="WHITE">
                     <font>
                         <Font size="36.0" />
                     </font>
@@ -61,20 +56,20 @@
                         <Font size="36.0" />
                     </font>
                 </Label>
-            <TableView prefHeight="412.0" prefWidth="1098.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-              </columns>
-            </TableView>
+                <TableView fx:id="tablaIngredientes" prefHeight="412.0" prefWidth="1098.0">
+                    <columns>
+                        <TableColumn fx:id="columnaNombre" prefWidth="912.0" text="Ingrediente" />
+                        <TableColumn fx:id="columnaCantidad" minWidth="0.0" prefWidth="185.0" text="Cantidad" />
+                    </columns>
+                </TableView>
             </children>
         </VBox>
-        <Button layoutX="897.0" layoutY="33.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="296.0" styleClass="boton" text="Modificar">
+        <Button layoutX="897.0" layoutY="33.0" mnemonicParsing="false" onAction="#abrirModificar" prefHeight="102.0" prefWidth="296.0" styleClass="boton" text="Modificar">
             <font>
                 <Font name="System Bold" size="48.0" />
             </font>
         </Button>
-        <Button layoutX="897.0" layoutY="154.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="296.0" styleClass="boton" text="Borrar">
+        <Button layoutX="897.0" layoutY="154.0" mnemonicParsing="false" onAction="#borrarPocion" prefHeight="102.0" prefWidth="296.0" styleClass="boton" text="Borrar">
             <font>
                 <Font name="System Bold" size="48.0" />
             </font>

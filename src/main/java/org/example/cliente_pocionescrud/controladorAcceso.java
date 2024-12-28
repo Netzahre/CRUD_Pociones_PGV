@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class controladorAcceso {
 
+
     @FXML
     protected void verPociones(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verDatos.fxml"));
@@ -30,7 +31,11 @@ public class controladorAcceso {
 
     @FXML
     protected void salir(ActionEvent event) throws IOException {
-        //TODO Cambiar de cerrar la app a desconectar del server y volver a la pantalla anterior
-        System.exit(0);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Conectar.fxml"));
+        Parent nuevaVista = fxmlLoader.load();
+        Scene escenaActual = ((Node) event.getSource()).getScene();
+        AccederServidor servidor = controladorConectar.getAccederServidor();
+        servidor.cerrarConexion();
+        escenaActual.setRoot(nuevaVista);
     }
 }
