@@ -15,28 +15,33 @@
                 <Image url="@fondo.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="583.0" fitWidth="583.0" layoutX="349.0" layoutY="-19.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="499.0" fitWidth="559.0" layoutX="392.0" layoutY="-25.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@logo.png" />
             </image>
         </ImageView>
 
         <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0" />
-        <VBox layoutX="341.0" layoutY="554.0" spacing="15.0">
+        <VBox layoutX="341.0" layoutY="444.0" prefHeight="513.0" prefWidth="600.0" spacing="15.0">
             <children>
                 <Button mnemonicParsing="false" onAction="#verPociones" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Ver Pociones">
                     <font>
-                        <Font name="System Bold" size="64.0" />
+                        <Font name="System Bold" size="60.0" />
                     </font>
                 </Button>
+            <Button mnemonicParsing="false" onAction="#verIngredientes" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Ver Ingredientes">
+               <font>
+                  <Font name="System Bold" size="60.0" />
+               </font>
+            </Button>
                 <Button mnemonicParsing="false" onAction="#verEstadisticas" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Ver Estadisticas">
                     <font>
-                        <Font name="System Bold" size="64.0" />
+                        <Font name="System Bold" size="60.0" />
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Desconectar" onAction="#salir">
+                <Button mnemonicParsing="false" onAction="#salir" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Salir">
                     <font>
-                        <Font name="System Bold" size="64.0" />
+                        <Font name="System Bold" size="60.0" />
                     </font>
                 </Button>
             </children>

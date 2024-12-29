@@ -14,15 +14,24 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class controladorVerDatos {
+/**
+ * Clase controladorVerPociones
+ *
+ * Esta clase es el controlador de la vista VerPociones.fxml
+ * Se encarga de mostrar las pociones disponibles en el servidor
+ * y de permitir al usuario filtrarlas y ver sus detalles.
+ *
+ */
+public class controladorVerPociones {
     AccederServidor servidor;
     @FXML
     private TextField nombreFiltro;
     @FXML
     private ComboBox<String> escuelaFiltro;
     @FXML
+    private ComboBox<String> tamanioFiltro;
+    @FXML
     private TableView<Pociones> tablaPociones;
-
     @FXML
     private TableColumn<Pociones, Integer> columnaId;
 
@@ -41,12 +50,22 @@ public class controladorVerDatos {
     @FXML
     private TableColumn<Pociones, Double> columnaPrecio;
 
+    /**
+     * Método initialize
+     *
+     * Este método se ejecuta al cargar la vista VerPociones.fxml
+     * y se encarga de inicializar los elementos de la interfaz gráfica.
+     *
+     */
     @FXML
     public void initialize() {
         inicializarColumnas();
         escuelaFiltro.getItems().addAll(
                 "CONJURACION", "EVOCACION", "ILUSION", "NIGROMANCIA", "TRANSMUTACION", "ABJURACION", "ENCANTAMIENTO", "DIVINACION", "UNIVERSAL", "TODAS"
         );
+        escuelaFiltro.setValue("TODAS");
+        tamanioFiltro.getItems().addAll("PEQUEÑO", "MEDIANO", "GRANDE", "TODOS");
+        tamanioFiltro.setValue("TODOS");
         try {
             rellenarTabla();
         } catch (IOException | ClassNotFoundException e) {
@@ -54,6 +73,13 @@ public class controladorVerDatos {
         }
     }
 
+    /**
+     * Método inicializarColumnas
+     *
+     * Este método se encarga de inicializar las columnas de la tabla
+     * de pociones.
+     *
+     */
     private void inicializarColumnas() {
         columnaId.setCellValueFactory(new PropertyValueFactory<>("idPocion"));
         columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombrePocion"));
@@ -62,11 +88,10 @@ public class controladorVerDatos {
         columnaTamanio.setCellValueFactory(new PropertyValueFactory<>("tamanio"));
         columnaPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
 
-        // Agregar un listener para la selección de una fila en la tabla
         tablaPociones.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 try {
-                    abrirPocion(newValue); // Pasamos la poción seleccionada
+                    abrirPocion(newValue);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -74,8 +99,16 @@ public class controladorVerDatos {
         });
     }
 
+    /**
+     * Método rellenarTabla
+     *
+     * Este método se encarga de obtener la lista de pociones
+     * del servidor y de rellenar la tabla con ellas.
+     *
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void rellenarTabla() throws IOException, ClassNotFoundException {
-        // Obtener la conexión al servidor
         servidor = ConexionServidor.getAccederServidor("localhost", 9069);
 
         if (servidor == null) {
@@ -84,11 +117,19 @@ public class controladorVerDatos {
         }
         List<Pociones> listaPociones = servidor.obtenerPociones();
 
-        // Establecer directamente la lista de pociones en la tabla
         tablaPociones.getItems().clear(); // Limpiar cualquier dato previo
         tablaPociones.getItems().addAll(listaPociones); // Agregar las nuevas pociones
     }
 
+    /**
+     * Método mostrarMensaje
+     *
+     * Este método se encarga de mostrar un mensaje en una ventana emergente.
+     *
+     * @param titulo Título de la ventana emergente
+     * @param mensaje Mensaje a mostrar
+     * @param tipo Tipo de mensaje (ERROR, INFORMACION, ADVERTENCIA)
+     */
     private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -97,27 +138,55 @@ public class controladorVerDatos {
         alerta.showAndWait();
     }
 
+    /**
+     * Método crearPocion
+     *
+     * Este método se encarga de cambiar a la vista CrearPocion.fxml
+     * para permitir al usuario crear una nueva poción.
+     *
+     * @param event Evento de click
+     */
     @FXML
     protected void crearPocion(ActionEvent event) throws IOException {
-        //TODO implementar la logica de server
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("crearPocion.fxml"));
         Parent nuevaVista = fxmlLoader.load();
         Scene escenaActual = ((Node) event.getSource()).getScene();
         escenaActual.setRoot(nuevaVista);
     }
 
+    /**
+     * Método abrirPocion
+     *
+     * Este método se encarga de cambiar a la vista DatosPocion.fxml
+     * para permitir al usuario ver los detalles de una poción.
+     *
+     * @param pocionSeleccionada Poción seleccionada
+     */
     @FXML
     protected void abrirPocion(Pociones pocionSeleccionada) throws IOException {
+        if (pocionSeleccionada == null) {
+            mostrarMensaje("Error", "No se seleccionó una poción válida.", Alert.AlertType.ERROR);
+            return;
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("datosPocion.fxml"));
         Parent nuevaVista = fxmlLoader.load();
 
         controladorDatosPocion controlador = fxmlLoader.getController();
+
         controlador.setPocion(pocionSeleccionada);
 
         Scene escenaActual = tablaPociones.getScene();
         escenaActual.setRoot(nuevaVista);
     }
 
+    /**
+     * Método volverAtras
+     *
+     * Este método se encarga de volver a la vista Acceso.fxml
+     *
+     * @param event Evento de click
+     */
     @FXML
     protected void volverAtras(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Acceso.fxml"));
@@ -126,31 +195,35 @@ public class controladorVerDatos {
         escenaActual.setRoot(nuevaVista);
     }
 
+    /**
+     * Método filtrarPociones
+     *
+     * Este método se encarga de filtrar las pociones en la tabla
+     * según los parámetros ingresados por el usuario.
+     *
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     @FXML
     private void filtrarPociones() throws IOException, ClassNotFoundException {
 
-        // Construir los parámetros de filtrado
         String nombre = nombreFiltro.getText().trim();
         String escuelas = escuelaFiltro.getValue();
+        String tamanio = tamanioFiltro.getValue();
 
-        if (escuelas == null) {
-            escuelas = "ABJURACION"; // Valor por defecto
-        }
         if (nombre.isEmpty()) {
             nombre = "%"; // Valor por defecto
         }
 
-
         Map<String, Object> filtros = Map.of(
                 "nombre", nombre,
-                "escuela", escuelas
+                "escuela", escuelas,
+                "tamanio", tamanio
         );
-        servidor.enviarParametrosDeFiltrado(filtros);
+        servidor.enviarFiltrosPociones(filtros);
 
-        // Recibir la lista filtrada
         List<Pociones> pocionesFiltradas = servidor.obtenerPocionesFiltradas();
 
-        // Actualizar la tabla
         tablaPociones.getItems().clear();
         tablaPociones.getItems().addAll(pocionesFiltradas);
     }

@@ -1,16 +1,34 @@
 package org.example.cliente_pocionescrud;
 
 import javafx.concurrent.Task;
+
 import java.io.IOException;
 
+/**
+ * Clase que se encarga de intentar conectar al servidor.
+ * Extiende de Task<Boolean> para poder ejecutar la conexión en un hilo separado.
+ * Si no, bloquearía la interfaz gráfica.
+ * Creeme, no quieres que la interfaz gráfica se bloquee.
+ */
 public class ConectarAlServidorTask extends Task<Boolean> {
     private final String host;
     private final int puerto;
 
+    /**
+     * Constructor.
+     * @param host Host del servidor.
+     * @param puerto Puerto del servidor.
+     */
     public ConectarAlServidorTask(String host, int puerto) {
         this.host = host;
         this.puerto = puerto;
     }
+
+    /**
+     * Intenta conectar al servidor.
+     * @return true si la conexión fue exitosa, false en caso contrario.
+     * @throws Exception
+     */
     @Override
     protected Boolean call() throws Exception {
         AccederServidor accederServidor = null;
@@ -27,5 +45,4 @@ public class ConectarAlServidorTask extends Task<Boolean> {
             return false;
         }
     }
-
 }

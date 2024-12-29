@@ -1,7 +1,6 @@
 package org.example.cliente_pocionescrud;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -19,8 +18,17 @@ import org.example.objetos.Pociones;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Clase controladorVerConsultas
+ *
+ * Esta clase es el controlador de la vista VerConsultas.fxml
+ * Se encarga de mostrar las consultas realizadas al servidor
+ * y de mostrar los resultados de las mismas en la interfaz gráfica.
+ *
+ * @version 1.0 2 Jun 2021
+ */
 public class controladorVerConsultas {
+    AccederServidor servidor;
     @FXML
     private TableView tablatop3PocionesCaras;
     @FXML
@@ -59,19 +67,22 @@ public class controladorVerConsultas {
     @FXML
     private ComboBox<String> filtroTamanio;
 
-    // Este método inicializa las tablas y obtiene los datos
+    /**
+     * Método initialize
+     *
+     * Este método se ejecuta al cargar la vista VerConsultas.fxml
+     * y se encarga de inicializar las columnas de las tablas
+     * y de rellenar las tablas con los datos obtenidos del servidor.
+     */
     public void initialize() {
         inicializarColumnas();
-        //rellenar el listView
         filtroTamanio.getItems().addAll("Pequeño", "Mediano", "Grande");
         filtroTamanio.setValue("Pequeño");
-
-        //Añadir un listener al combobox
         filtroTamanio.valueProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 rellenarTablas();
             } catch (IOException | ClassNotFoundException e) {
-                mostrarMensaje("Error", "No se pudo obtener los datos del servidor.", Alert.AlertType.ERROR);
+                mostrarMensaje("Error", "Algo fallo al rellenar las tablas con el nuevo filtro", Alert.AlertType.ERROR);
             }
         });
         try {
@@ -81,7 +92,11 @@ public class controladorVerConsultas {
         }
     }
 
-    // Inicializamos las columnas de todas las tablas
+    /**
+     * Método inicializarColumnas
+     *
+     * Este método se encarga de inicializar las columnas de las tablas
+     */
     private void inicializarColumnas() {
         // Ingredientes en más de 3 pociones
         columnasMas3Ingredientes.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[0]));
@@ -105,30 +120,31 @@ public class controladorVerConsultas {
         columnaTop10MuchosIngredientesCantidad.setCellValueFactory(data -> new SimpleLongProperty((Long) data.getValue()[1]).asObject());
     }
 
-    // Método para rellenar las tablas con los datos obtenidos del servidor
+    /**
+     * Método rellenarTablas
+     *
+     * Este método se encarga de rellenar las tablas con los datos obtenidos del servidor
+     * para cada consulta realizada.
+     */
     private void rellenarTablas() throws IOException, ClassNotFoundException {
-        // Obtener la conexión al servidor
-        AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
+        servidor = ConexionServidor.getAccederServidor("localhost", 9069);
         if (servidor == null) {
             mostrarMensaje("Error", "No hay conexión con el servidor.", Alert.AlertType.ERROR);
             return;
         }
 
-        // Solicitar y recibir los datos del servidor para cada consulta
         List<Object[]> ingredientesMas3Pociones = servidor.obtenerIngredientesEnMasDeTresPociones();
         List<Object[]> cantidadIngredientesEscuelas = servidor.obtenerCantidadIngredientesEscuelas();
         List<Pociones> top3PocionesCaras = servidor.obtenerTop3PocionesCaras(filtroTamanio.getValue());
         List<Object[]> cantidadVecesIngrediente = servidor.obtenerCantidadVecesIngredientes();
         List<Object[]> top10PocionesMuchosIngredientes = servidor.TOP10PocionesMuchosIngredientes();
 
-        // Limpiar las tablas previas
         tablaingredientesmas3pociones.getItems().clear();
         tablacantidadIngredientesEscuelas.getItems().clear();
         tablatop3PocionesCaras.getItems().clear();
         tablacantidadVecesIngrediente.getItems().clear();
         tablatop10pocionesMuchosIngredientes.getItems().clear();
 
-        // Agregar los nuevos datos a las tablas
         tablaingredientesmas3pociones.getItems().addAll(ingredientesMas3Pociones);
         tablacantidadIngredientesEscuelas.getItems().addAll(cantidadIngredientesEscuelas);
         tablatop3PocionesCaras.getItems().addAll(top3PocionesCaras);
@@ -136,7 +152,15 @@ public class controladorVerConsultas {
         tablatop10pocionesMuchosIngredientes.getItems().addAll(top10PocionesMuchosIngredientes);
     }
 
-    // Mostrar mensajes de error o información
+    /**
+     * Método mostrarMensaje
+     *
+     * Este método se encarga de mostrar un mensaje en la interfaz gráfica
+     *
+     * @param titulo Título del mensaje
+     * @param mensaje Contenido del mensaje
+     * @param tipo Tipo de mensaje
+     */
     private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -145,6 +169,13 @@ public class controladorVerConsultas {
         alerta.showAndWait();
     }
 
+    /**
+     * Método atras
+     *
+     * Este método se encarga de volver a la vista Acceso.fxml
+     *
+     * @param event Evento de click
+     */
     @FXML
     protected void atras(ActionEvent event) throws IOException {
         //TODO implementar la logica de server

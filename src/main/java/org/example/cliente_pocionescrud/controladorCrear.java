@@ -1,5 +1,6 @@
 package org.example.cliente_pocionescrud;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 import org.example.objetos.Ingredientes;
 import org.example.objetos.Pociones;
 
@@ -16,15 +19,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador para la vista de creación de poción.
+ */
 public class controladorCrear {
+    private AccederServidor servidor;
     @FXML
     private TextField NombrePocionTextField;
     @FXML
     private TextField EfectoPocionTextField;
     @FXML
-    private ListView escuelaListView;
+    private ComboBox escuelaComboBox;
     @FXML
-    private ListView tamanoListView;
+    private ComboBox tamanoComboBox;
     @FXML
     private TextField precioPocion;
     @FXML
@@ -36,57 +43,112 @@ public class controladorCrear {
 
     private Map<Ingredientes, Integer> ingredientesMap = new HashMap<>();
 
-    @FXML
+    /**
+     * Método que se ejecuta al inicializar la vista.
+     */
     public void initialize() {
+        iniciarColumnas();
+        escuelaComboBox.getItems().setAll(Pociones.Escuela.values());
+        tamanoComboBox.getItems().setAll(Pociones.Tamanio.values());
+        escuelaComboBox.getSelectionModel().selectFirst();
+        tamanoComboBox.getSelectionModel().selectFirst();
         try {
-            // Configurar columnas de la tabla
-            columnaIngrediente.setCellValueFactory(new PropertyValueFactory<>("nombreIngrediente"));
-            columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-
-            // Poblar la tabla con ingredientes desde el servidor
-            AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
-            List<Ingredientes> ingredientes = servidor.obtenerIngredientes();
-
-            // Llenar la tabla con ingredientes inicializados con cantidad 0
-            for (Ingredientes ingrediente : ingredientes) {
-                ingredientesMap.put(ingrediente, 0); // Asignar cantidad 0
-            }
-
-            // Cargar la lista en la tabla
-            tableViewIngredientes.getItems().setAll(ingredientesMap.keySet());
+            rellenarTabla();
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarMensaje("Error", "No se pudieron cargar los ingredientes.", Alert.AlertType.ERROR);
+            mostrarMensaje("Error", "No se pudieron cargar los ingredientes desde el servidor.", Alert.AlertType.ERROR);
         }
     }
 
+    /**
+     * Método para inicializar las columnas de la tabla.
+     */
+    private void iniciarColumnas() {
+        columnaIngrediente.setCellValueFactory(new PropertyValueFactory<>("nombreIngrediente"));
+        columnaCantidad.setCellValueFactory(data -> new SimpleIntegerProperty(ingredientesMap.get(data.getValue())).asObject());
+        columnaCantidad.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        columnaIngrediente.setEditable(false);
+        columnaCantidad.setEditable(true);
+
+        // Actualizar el mapa de ingredientes cuando se edita la cantidad. Increible.
+        columnaCantidad.setOnEditCommit(event -> {
+            Ingredientes ingrediente = event.getRowValue();
+            String newCantidadStr = event.getNewValue().toString();
+
+            try {
+                Integer newCantidad = Integer.parseInt(newCantidadStr);
+                if (newCantidad >= 0) {
+                    ingredientesMap.put(ingrediente, newCantidad); // Actualizar la cantidad en el mapa
+                } else {
+                    mostrarMensaje("Error", "La cantidad debe ser un número positivo.", Alert.AlertType.ERROR);
+                }
+            } catch (NumberFormatException e) {
+                // Mostrar mensaje de error si no se puede convertir a número y refrescar la tabla para que se muestre el valor anterior
+                mostrarMensaje("Error", "Por favor, ingrese un número válido para la cantidad.", Alert.AlertType.ERROR);
+                tableViewIngredientes.refresh();
+            }
+        });
+    }
+
+    /**
+     * Método para rellenar la tabla con los ingredientes.
+     */
+    private void rellenarTabla() throws IOException, ClassNotFoundException {
+        try {
+            servidor = ConexionServidor.getAccederServidor("localhost", 9069);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Ingredientes> ingredientes = servidor.obtenerIngredientes();
+        if (ingredientes == null || ingredientes.isEmpty()) {
+            mostrarMensaje("Error", "No se encontraron ingredientes en la base de datos.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        for (Ingredientes ingrediente : ingredientes) {
+            ingredientesMap.put(ingrediente, 0); // Asignar cantidad 0 por defecto
+        }
+
+        tableViewIngredientes.getItems().setAll(ingredientesMap.keySet());
+    }
+
+    /**
+     * Método para verificar que el precio de la poción sea un número mayor a 0.
+     * @return true si el precio es válido, false en caso contrario.
+     */
     private boolean verificarPrecio() {
         try {
             double precio = Double.parseDouble(precioPocion.getText());
             return precio > 0;
         } catch (Exception e) {
+            mostrarMensaje("Error", "El precio debe ser un número y mayor a 0.", Alert.AlertType.ERROR);
             return false;
         }
     }
 
+    /**
+     * Método para confirmar la creación de la poción.
+     * @param event Evento de clic en el botón.
+     */
     @FXML
     protected void confirmarCrear(ActionEvent event) {
         try {
             String nombre = NombrePocionTextField.getText();
             String efecto = EfectoPocionTextField.getText();
-            String escuela = escuelaListView.getSelectionModel().getSelectedItem().toString();
-            String tamano = tamanoListView.getSelectionModel().getSelectedItem().toString();
+            String escuela = escuelaComboBox.getSelectionModel().getSelectedItem().toString();
+            String tamano = tamanoComboBox.getSelectionModel().getSelectedItem().toString();
             if (!verificarPrecio()) {
-                mostrarMensaje("Error", "El precio debe ser un número y mayor a 0.", Alert.AlertType.ERROR);
+                return;
+            }
+            if (nombre.isEmpty() || efecto.isEmpty() || escuela.isEmpty() || tamano.isEmpty()) {
+                mostrarMensaje("Error", "Todos los campos son obligatorios.", Alert.AlertType.ERROR);
                 return;
             }
 
             double precio = Double.parseDouble(precioPocion.getText());
-
-            // Crear una instancia de Pociones
             Pociones nuevaPocion = new Pociones(nombre, efecto, precio, Pociones.Escuela.valueOf(escuela), Pociones.Tamanio.valueOf(tamano));
 
-            // Filtrar los ingredientes que tienen cantidad mayor a 0
             Map<Ingredientes, Integer> ingredientesSeleccionados = new HashMap<>();
             for (Ingredientes ingrediente : ingredientesMap.keySet()) {
                 Integer cantidad = ingredientesMap.get(ingrediente);
@@ -94,16 +156,11 @@ public class controladorCrear {
                     ingredientesSeleccionados.put(ingrediente, cantidad);
                 }
             }
-
-            // Enviar la nueva poción al servidor
-            AccederServidor servidor = controladorConectar.getAccederServidor();
+            servidor = ConexionServidor.getAccederServidor("localhost", 9069);
             servidor.crearPocion(nuevaPocion, ingredientesSeleccionados);
-
-            // Mostrar mensaje de éxito
             mostrarMensaje("Creación Exitosa", "La poción se ha creado correctamente.", Alert.AlertType.INFORMATION);
 
-            // Cambiar vista
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verDatos.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerPociones.fxml"));
             Parent nuevaVista = fxmlLoader.load();
             Scene escenaActual = ((Node) event.getSource()).getScene();
             escenaActual.setRoot(nuevaVista);
@@ -114,18 +171,26 @@ public class controladorCrear {
         }
     }
 
+    /**
+     * Método para cancelar la creación de la poción.
+     * @param event Evento de clic en el botón.
+     * @throws IOException Excepción de entrada/salida.
+     */
     @FXML
     protected void atras(ActionEvent event) throws IOException {
-        // Confirmar si se quiere cancelar
         mostrarMensaje("Confirmar cancelar", "¿Desea cancelar la creación de la poción?", Alert.AlertType.CONFIRMATION);
-
-        // Volver a la vista anterior
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("verDatos.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerPociones.fxml"));
         Parent nuevaVista = fxmlLoader.load();
         Scene escenaActual = ((Node) event.getSource()).getScene();
         escenaActual.setRoot(nuevaVista);
     }
 
+    /**
+     * Método para mostrar un mensaje en pantalla.
+     * @param titulo Título del mensaje.
+     * @param mensaje Contenido del mensaje.
+     * @param tipo Tipo de mensaje.
+     */
     private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);

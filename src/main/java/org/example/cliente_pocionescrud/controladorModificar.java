@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
 import org.example.objetos.Ingredientes;
@@ -21,9 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador para la vista de modificación de una poción.
+ */
 public class controladorModificar {
     private Pociones pocionSeleccionada;
-    private List<Map.Entry<Ingredientes, Integer>> listaIngredientes = new ArrayList<>();
+    AccederServidor servidor;
 
     @FXML
     private TableView<Map.Entry<Ingredientes, Integer>> tableViewIngredientes;
@@ -36,21 +38,64 @@ public class controladorModificar {
     @FXML
     private TextField efectoPocion;
     @FXML
-    private ComboBox<Pociones.Escuela> escuelaPocion;
+    private ComboBox escuelaPocion;
     @FXML
-    private ComboBox<Pociones.Tamanio> tamanioPocion;
+    private ComboBox tamanioPocion;
     @FXML
     private TextField precioPocion;
 
     private Map<Ingredientes, Integer> ingredientesMap = new HashMap<>();
 
+    /**
+     * Establecer la poción a modificar.
+     *
+     * @param pocion Poción a modificar.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void setPocion(Pociones pocion) throws IOException, ClassNotFoundException {
         this.pocionSeleccionada = pocion;
+        iniciarElementos();
+        rellenarTabla();
         cargarDetallesPocion();
     }
 
+    /**
+     * Rellenar la tabla de ingredientes con los ingredientes de la base de datos.
+     * Me niego a calcular la cantidad de ingredientes de la receta original. Es un cacao. Ponlos desde cero.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void rellenarTabla() throws IOException, ClassNotFoundException {
+        try {
+            servidor = ConexionServidor.getAccederServidor("localhost", 9069);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Ingredientes> ingredientes = servidor.obtenerIngredientes();
+
+        if (ingredientes == null || ingredientes.isEmpty()) {
+            mostrarMensaje("Error", "No se encontraron ingredientes en la base de datos.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        ingredientesMap.clear();
+        for (Ingredientes ingrediente : ingredientes) {
+            ingredientesMap.put(ingrediente, 0);
+        }
+
+        List<Map.Entry<Ingredientes, Integer>> listaIngredientes = new ArrayList<>(ingredientesMap.entrySet());
+        tableViewIngredientes.getItems().setAll(listaIngredientes);
+    }
+
+    /**
+     * Inicializar los elementos de la vista.
+     */
     @FXML
-    public void initialize() throws IOException, ClassNotFoundException {
+    private void iniciarElementos() {
+        escuelaPocion.getItems().setAll(Pociones.Escuela.values());
+        tamanioPocion.getItems().setAll(Pociones.Tamanio.values());
         ColumnaIngredientes.setCellValueFactory(entry -> new SimpleObjectProperty<>(entry.getValue().getKey().getNombreIngrediente()));
         ColumnaIngredientes.setEditable(false);
 
@@ -58,41 +103,31 @@ public class controladorModificar {
         ColumnaCantidad.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         ColumnaCantidad.setEditable(true);
 
-        AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
-        List<Ingredientes> ingredientes = servidor.obtenerIngredientes();
-
-        for (Ingredientes ingrediente : ingredientes) {
-            ingredientesMap.put(ingrediente, 0); // Asignar cantidad 0
-        }
-
-        // Inicializar ComboBox
-        escuelaPocion.getItems().addAll(Pociones.Escuela.values());
-        tamanioPocion.getItems().addAll(Pociones.Tamanio.values());
-
-        // Validar que solo se ingresen números en la columna de cantidad
         ColumnaCantidad.setOnEditCommit(event -> {
-            String newValue = event.getNewValue().toString();
-            try {
-                // Intentar convertir el nuevo valor en un número
-                Integer.parseInt(newValue);
-            } catch (NumberFormatException e) {
-                // Si el valor no es un número, revertir el cambio
-                mostrarMensaje("Error", "La cantidad debe ser un número entero", Alert.AlertType.ERROR);
-                event.getTableView().getItems().get(event.getTablePosition().getRow()).setValue(event.getOldValue());
-            }
+            Map.Entry<Ingredientes, Integer> entry = event.getRowValue();
+            Integer newCantidad = event.getNewValue();
+
+            ingredientesMap.put(entry.getKey(), newCantidad);
         });
     }
 
-    // Cargar detalles de la poción en los campos
+    /**
+     * Cargar los detalles de la poción en los campos de texto.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void cargarDetallesPocion() throws IOException, ClassNotFoundException {
         nombrePocion.setText(pocionSeleccionada.getNombrePocion());
         efectoPocion.setText(pocionSeleccionada.getEfectoPocion());
         escuelaPocion.setValue(pocionSeleccionada.getEscuela());
         tamanioPocion.setValue(pocionSeleccionada.getTamanio());
         precioPocion.setText(String.valueOf(pocionSeleccionada.getPrecio()));
-
     }
 
+    /**
+     * Verificar que el precio de la poción sea un número positivo.
+     * @return true si el precio es válido, false en caso contrario.
+     */
     @FXML
     private boolean verificarPrecio() {
         try {
@@ -108,6 +143,11 @@ public class controladorModificar {
         }
     }
 
+    /**
+     * Confirmar la modificación de la poción.
+     * @param event Evento de clic en el botón.
+     * @throws IOException
+     */
     @FXML
     protected void confirmarModificar(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -121,15 +161,16 @@ public class controladorModificar {
                         if (!verificarPrecio()) {
                             return;
                         }
-                        Pociones.Escuela escuela = escuelaPocion.getValue();
-                        Pociones.Tamanio tamanio = tamanioPocion.getValue();
+                        String escuela = escuelaPocion.getSelectionModel().getSelectedItem().toString();
+                        String tamano = tamanioPocion.getSelectionModel().getSelectedItem().toString();
+
 
                         Pociones nuevaPocion = new Pociones(
                                 nombrePocion.getText(),
                                 efectoPocion.getText(),
                                 Double.parseDouble(precioPocion.getText()),
-                                escuela,
-                                tamanio
+                                Pociones.Escuela.valueOf(escuela),
+                                Pociones.Tamanio.valueOf(tamano)
                         );
 
                         Map<Ingredientes, Integer> ingredientesModificados = new HashMap<>();
@@ -140,7 +181,6 @@ public class controladorModificar {
                             }
                         }
 
-                        // Enviar al servidor
                         AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
                         if (servidor != null) {
                           servidor.enviarPocionModificada(pocionSeleccionada.getIdPocion(), nuevaPocion, ingredientesModificados);
@@ -148,8 +188,7 @@ public class controladorModificar {
                         } else {
                             mostrarMensaje("Error", "No se pudo conectar al servidor.", Alert.AlertType.ERROR);
                         }
-                        // Cambiar la vista después de la modificación
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("datosPocion.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerPociones.fxml"));
                         Parent nuevaVista = fxmlLoader.load();
                         Scene escenaActual = ((Node) event.getSource()).getScene();
                         escenaActual.setRoot(nuevaVista);
@@ -163,6 +202,11 @@ public class controladorModificar {
         });
     }
 
+    /**
+     * Cancelar la modificación de la poción.
+     * @param event Evento de clic en el botón.
+     * @throws IOException
+     */
     @FXML
     protected void atras(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -175,6 +219,8 @@ public class controladorModificar {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("datosPocion.fxml"));
                     Parent nuevaVista = fxmlLoader.load();
+                    controladorDatosPocion controlador = fxmlLoader.getController();
+                    controlador.setPocion(pocionSeleccionada);
                     Scene escenaActual = ((Node) event.getSource()).getScene();
                     escenaActual.setRoot(nuevaVista);
                 } catch (IOException e) {
@@ -186,6 +232,12 @@ public class controladorModificar {
         });
     }
 
+    /**
+     * Mostrar un mensaje en pantalla.
+     * @param titulo Título del mensaje.
+     * @param mensaje Contenido del mensaje.
+     * @param tipo Tipo de mensaje.
+     */
     private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);

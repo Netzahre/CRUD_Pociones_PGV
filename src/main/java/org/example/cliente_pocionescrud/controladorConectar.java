@@ -11,30 +11,31 @@ import javafx.scene.control.Alert;
 
 import java.io.IOException;
 
+/**
+ * Controlador de la vista de conexión.
+ */
 public class controladorConectar {
-    private static AccederServidor accederServidor;
 
-    public static AccederServidor getAccederServidor() {
-        return accederServidor;
-    }
-
+    /**
+     * Metodo que se ejecuta cuando se presiona el botón "Conectar".
+     */
     @FXML
     protected void Conectar(ActionEvent event) throws IOException {
         try {
-            // Ejecutar la tarea de conexión
+            // Crear una tarea para conectarse al servidor
             ConectarAlServidorTask tareaConexion = new ConectarAlServidorTask("localhost", 9069);
-            // Establecer el comportamiento cuando la tarea se ejecute correctamente
             tareaConexion.setOnSucceeded(_ -> {
-                System.out.println("setOnSucceeded ejecutado");
+
+                // Verificar si la conexión fue exitosa
                 if (tareaConexion.getValue()) {
-                    System.out.println("Conexión exitosa, cambiando la vista.");
+                    System.out.println("Conexión exitosa");
+                    // Cambiar a la vista de acceso si la conexión fue exitosa. Esto se hace en el hilo de la interfaz gráfica.
                     Platform.runLater(() -> {
                         try {
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("acceso.fxml"));
                             Parent nuevaVista = fxmlLoader.load();
                             Scene escenaActual = ((Node) event.getSource()).getScene();
                             escenaActual.setRoot(nuevaVista);
-
                             mostrarMensaje("Conexión exitosa", "Usted se ha conectado con éxito al servidor.", Alert.AlertType.INFORMATION);
                         } catch (IOException ex) {
                             mostrarMensaje("Error", "No se pudo cargar la vista siguiente.", Alert.AlertType.ERROR);
@@ -45,25 +46,33 @@ public class controladorConectar {
                 }
             });
 
-
-            // Establecer el comportamiento si la tarea falla
+            // Manejar errores en la conexión al servidor
             tareaConexion.setOnFailed(e -> {
                 System.out.println("setOnFailed ejecutado");
                 mostrarMensaje("Error", tareaConexion.getMessage(), Alert.AlertType.ERROR);
             });
 
-            // Ejecutar el Task en un hilo de fondo para no bloquear la interfaz
+            // Ejecutar el Task en un hilo de fondo para no bloquear la interfaz. Bendito Google.
             new Thread(tareaConexion).start();
         } catch (Exception e) {
             mostrarMensaje("Error", "No se pudo conectar al servidor.", Alert.AlertType.ERROR);
         }
     }
 
+    /**
+     * Metodo que se ejecuta cuando se presiona el botón "Salir". Cierra la aplicación.
+     */
     @FXML
     protected void salir() {
         System.exit(0);
     }
 
+    /**
+     * Muestra un mensaje en una ventana emergente.
+     * @param titulo El título de la ventana.
+     * @param mensaje El mensaje a mostrar.
+     * @param tipo El tipo de mensaje.
+     */
     private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
