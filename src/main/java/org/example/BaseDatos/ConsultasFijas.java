@@ -7,6 +7,9 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
+/**
+ * Clase que contiene las consultas fijas que se realizarán en la base de datos
+ */
 public class ConsultasFijas {
 
 
@@ -31,7 +34,10 @@ public class ConsultasFijas {
         return lista;
     }
 
-    //Pociones mas caras por tamaño
+    /**
+     * Consulta que devuelve las 3 pociones más caras y permite filtrar por tamaño
+     * @return Lista de objetos con las pociones
+     */
     public List<Pociones> pocionesPorTamanio(Pociones.Tamanio tamanio){
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         String query = "SELECT P.tamanio, MAX(P.precio) AS precio_maximo FROM Pociones P WHERE P.tamanio = :tamanio GROUP BY P.tamanio ORDER BY precio_maximo DESC";
@@ -54,7 +60,10 @@ public class ConsultasFijas {
         return lista;
     }
 
-    //Pociones de cada escuela con su promedio de ingredientes utilizados
+    /**
+     * Consulta que devuelve el promedio de ingredientes por pocion agrupado por escuela
+     * @return Lista de objetos con la escuela y el promedio de ingredientes
+     */
     public List<Object[]> PromedioDeIngredientesPorPocion(){
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         String query = "SELECT P.escuela, COUNT(R.ingrediente) AS promedio_ingredientes FROM Pociones P JOIN Recetas R ON P.idPocion = R.pocion.idPocion GROUP BY P.escuela";
@@ -64,6 +73,4 @@ public class ConsultasFijas {
         sesion.close();
         return lista;
     }
-
-
 }

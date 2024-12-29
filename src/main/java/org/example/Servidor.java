@@ -1,20 +1,17 @@
 package org.example;
-
-import org.example.BaseDatos.ConsultasFijas;
-import org.example.objetos.Ingredientes;
-import org.example.objetos.Pociones;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Clase para manejar las conexiones de los clientes
+ */
 public class Servidor {
     private static final int PUERTO = 9069;
-    private static final int MAXIMO_CONEXIONES = 3; // Limitar a 3 conexiones simultáneas
+    private static final int MAXIMO_CONEXIONES = 3;
     private ServerSocket serverSocket;
     private ExecutorService colaEjecutor;
 
@@ -24,6 +21,10 @@ public class Servidor {
         servidor.iniciar();
     }
 
+    /**
+     * Metodo para manejar las conexiones de los clientes
+     * @throws IOException Si ocurre un error de entrada/salida
+     */
     public void iniciar() throws IOException {
         serverSocket = new ServerSocket(PUERTO);
         colaEjecutor = Executors.newFixedThreadPool(MAXIMO_CONEXIONES);
@@ -43,61 +44,25 @@ public class Servidor {
             }
         }
     }
-    private void sendFullMessage(Socket socket) throws IOException {
-        // Enviar un mensaje al cliente indicando que el servidor está lleno
+
+    /**
+     * Metodo para manejar las conexiones de los clientes
+     * @param socket Socket de la conexión
+     * @throws IOException Si ocurre un error de entrada/salida
+     */
+    private void serverLleno(Socket socket) throws IOException {
         try (ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream())) {
             salida.writeObject("LLENO");
         }
     }
 
+    /**
+     * Metodo para manejar las conexiones de los clientes
+     * @throws IOException Si ocurre un error de entrada/salida
+     */
+    //Aunque no lo este usando lo dejo por buena practica.
     public void cerrar() throws IOException {
         serverSocket.close();
         colaEjecutor.shutdown();
     }
-
-    private void consultas(){
-        ConsultasFijas con = new ConsultasFijas();
-
-        System.out.println("Promedio de ingredientes.");
-        List<Object[]> list = con.PromedioDeIngredientesPorPocion();
-        for (Object[] pocion : list) {
-            String escuela = ((Pociones.Escuela) pocion[0]).name().toLowerCase();
-            Long promedio = (Long) pocion[1];
-            System.out.println(escuela + " - " + promedio);
-        }
-        System.out.println("*-----------------------*\nIngredientes en mas de 3 pociones");
-
-        List<Object[]> list1 = con.ingredientesEnMasDeTresPociones();
-        for (Object[] ingrediente : list1){
-            String ingred = (ingrediente[0]).toString();
-            Long cantidad = (Long) ingrediente[1];
-            System.out.println(ingred +" - "+cantidad);
-        }
-
-        System.out.println("*-----------------------*\nCantidad total de tipo de ingrediente utilizado");
-
-        List<Object[]> list2 = con.totalTiposIngredientes();
-        for (Object[] tipoing : list2){
-            String tipo = ((Ingredientes.TiposIngrediente) tipoing[0]).name().toLowerCase();
-            Long cantidad = (Long) tipoing[1];
-            System.out.println(tipo+" - "+cantidad);
-        }
-
-
-        System.out.println("*-----------------------*\nPociones mas caras por tamaño");
-
-        List<Pociones> list3 = con.pocionesPorTamanio(Pociones.Tamanio.GRANDE);
-        for (Pociones pocTam : list3){
-            System.out.println(pocTam.getNombrePocion()+" - "+pocTam.getPrecio());
-        }
-
-        System.out.println("*-----------------------*\ntop 10 pociones con mayor cantidad de ingredientes");
-        List<Object[]> list4 = con.pocionesConMasIngredientes();
-        for (Object[] poc : list4){
-            String nombre = poc[0].toString();
-            Long cantidad = ((Long) poc[1]);
-            System.out.println(nombre+" - "+cantidad);
-        }
-    }
-
 }
