@@ -7,6 +7,9 @@
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
+-- CREATE DATABASE pgvpociones
+-- USE pgvpociones
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -20,13 +23,11 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `pgvpociones`
 --
-CREATE DATABASE pgvpociones
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `ingredientes`
 --
-CREATE 
 CREATE TABLE `ingredientes` (
   `idIngrediente` int(11) NOT NULL,
   `nombreIngrediente` varchar(255) NOT NULL,
