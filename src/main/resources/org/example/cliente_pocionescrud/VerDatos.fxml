@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -11,7 +10,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorVerDatos">
@@ -57,7 +55,7 @@
                 <Font size="18.0" />
             </font>
         </Label>
-        <Button layoutX="1017.0" layoutY="462.0" mnemonicParsing="false" onAction="#filtrarPociones" prefHeight="27.0" prefWidth="175.0" styleClass="boton" text="Filtrar">
+        <Button layoutX="858.0" layoutY="466.0" mnemonicParsing="false" onAction="#filtrarPociones" prefHeight="27.0" prefWidth="175.0" styleClass="boton" text="Filtrar">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
@@ -67,7 +65,7 @@
                 <Font name="System Bold" size="48.0" />
             </font>
         </Label>
-        <HBox alignment="CENTER_LEFT" layoutX="24.0" layoutY="465.0" spacing="10.0">
+        <HBox alignment="CENTER_LEFT" layoutX="250.0" layoutY="468.0" spacing="10.0">
             <children>
                 <Label text="Nombre" textFill="WHITE">
                     <font>
@@ -77,69 +75,15 @@
                 <TextField fx:id="nombreFiltro" prefHeight="34.0" prefWidth="214.0" promptText="Nombre" />
             </children>
         </HBox>
-        <HBox alignment="CENTER_LEFT" layoutX="328.0" layoutY="465.0" spacing="10.0">
+        <HBox alignment="CENTER_LEFT" layoutX="554.0" layoutY="468.0" spacing="10.0">
             <children>
                 <Label text="Escuela" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
-                <ListView fx:id="escuelaFiltro" prefHeight="34.0" prefWidth="200.0" />
+            <ComboBox fx:id="escuelaFiltro" prefHeight="35.0" prefWidth="204.0" />
             </children>
         </HBox>
-        <HBox alignment="CENTER_LEFT" layoutX="600.0" layoutY="465.0" spacing="10.0" />
-        <VBox layoutX="640.0" layoutY="350.0" spacing="10.0">
-            <children>
-                <Label text="Tipo ingrediente" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-                <CheckBox fx:id="mineralFiltro" mnemonicParsing="false" text="Mineral" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-                <CheckBox fx:id="vegetalFiltro" mnemonicParsing="false" text="Vegetal" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-                <CheckBox fx:id="organicoFiltro" mnemonicParsing="false" text="Organico" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-                <CheckBox fx:id="magicoFiltro" mnemonicParsing="false" text="Magico" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-            </children>
-        </VBox>
-        <VBox layoutX="815.0" layoutY="381.0" spacing="10.0">
-            <children>
-                <Label text="Tamaño" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-                <CheckBox fx:id="pequenoFiltro" mnemonicParsing="false" text="Pequeño" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-                <CheckBox fx:id="medianoFiltro" mnemonicParsing="false" text="Mediano" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-                <CheckBox fx:id="grandeFiltro" mnemonicParsing="false" text="Grande" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </CheckBox>
-            </children>
-        </VBox>
     </children>
 </AnchorPane>

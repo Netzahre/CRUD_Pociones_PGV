@@ -44,7 +44,7 @@ public class controladorCrear {
             columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 
             // Poblar la tabla con ingredientes desde el servidor
-            AccederServidor servidor = controladorConectar.getAccederServidor();
+            AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
             List<Ingredientes> ingredientes = servidor.obtenerIngredientes();
 
             // Llenar la tabla con ingredientes inicializados con cantidad 0

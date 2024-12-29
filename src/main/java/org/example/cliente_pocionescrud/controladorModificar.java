@@ -31,7 +31,6 @@ public class controladorModificar {
     private TableColumn<Map.Entry<Ingredientes, Integer>, String> ColumnaIngredientes;
     @FXML
     private TableColumn<Map.Entry<Ingredientes, Integer>, Integer> ColumnaCantidad;
-
     @FXML
     private TextField nombrePocion;
     @FXML
@@ -43,20 +42,28 @@ public class controladorModificar {
     @FXML
     private TextField precioPocion;
 
+    private Map<Ingredientes, Integer> ingredientesMap = new HashMap<>();
+
     public void setPocion(Pociones pocion) throws IOException, ClassNotFoundException {
         this.pocionSeleccionada = pocion;
         cargarDetallesPocion();
     }
 
-
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException, ClassNotFoundException {
         ColumnaIngredientes.setCellValueFactory(entry -> new SimpleObjectProperty<>(entry.getValue().getKey().getNombreIngrediente()));
         ColumnaIngredientes.setEditable(false);
 
         ColumnaCantidad.setCellValueFactory(entry -> new SimpleIntegerProperty(entry.getValue().getValue()).asObject());
         ColumnaCantidad.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         ColumnaCantidad.setEditable(true);
+
+        AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
+        List<Ingredientes> ingredientes = servidor.obtenerIngredientes();
+
+        for (Ingredientes ingrediente : ingredientes) {
+            ingredientesMap.put(ingrediente, 0); // Asignar cantidad 0
+        }
 
         // Inicializar ComboBox
         escuelaPocion.getItems().addAll(Pociones.Escuela.values());
@@ -84,15 +91,6 @@ public class controladorModificar {
         tamanioPocion.setValue(pocionSeleccionada.getTamanio());
         precioPocion.setText(String.valueOf(pocionSeleccionada.getPrecio()));
 
-        // Cargar ingredientes en la lista
-        AccederServidor servidor = controladorConectar.getAccederServidor();
-        if (servidor != null) {
-            Map<Ingredientes, Integer> ingredientes = servidor.obtenerIngredientesPocion(pocionSeleccionada.getIdPocion());
-
-            // Convertir Map en lista de Map.Entry
-            listaIngredientes.addAll(ingredientes.entrySet());
-            tableViewIngredientes.getItems().setAll(listaIngredientes);
-        }
     }
 
     @FXML
@@ -116,7 +114,6 @@ public class controladorModificar {
         alert.setTitle("Confirmar modificacion");
         alert.setHeaderText("¿Desea confirmar la modificación de la poción?");
 
-        // Esperar la respuesta del usuario
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 {
@@ -134,17 +131,20 @@ public class controladorModificar {
                                 escuela,
                                 tamanio
                         );
+
                         Map<Ingredientes, Integer> ingredientesModificados = new HashMap<>();
-                        for (Map.Entry<Ingredientes, Integer> entry : listaIngredientes) {
-                            ingredientesModificados.put(entry.getKey(), entry.getValue());
+                        for (Ingredientes ingrediente : ingredientesMap.keySet()) {
+                            Integer cantidad = ingredientesMap.get(ingrediente);
+                            if (cantidad > 0) {
+                                ingredientesModificados.put(ingrediente, cantidad);
+                            }
                         }
 
                         // Enviar al servidor
-                        AccederServidor servidor = controladorConectar.getAccederServidor();
+                        AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
                         if (servidor != null) {
-                            servidor.enviarMensaje("MODIFICAR_POCION");
-                            servidor.enviarMensaje(String.valueOf(pocionSeleccionada.getIdPocion()));  // ID de la poción a modificar
-                            servidor.enviarPocionModificada(pocionSeleccionada.getIdPocion(), nuevaPocion, ingredientesModificados);  // Enviar la poción modificada
+                          servidor.enviarPocionModificada(pocionSeleccionada.getIdPocion(), nuevaPocion, ingredientesModificados);
+
                         } else {
                             mostrarMensaje("Error", "No se pudo conectar al servidor.", Alert.AlertType.ERROR);
                         }
@@ -158,23 +158,20 @@ public class controladorModificar {
                     }
                 }
             } else {
-                // Si el usuario hace clic en Cancelar, no hacer nada
+                // Nothign da nothing
             }
         });
     }
 
     @FXML
     protected void atras(ActionEvent event) throws IOException {
-        // Crear un cuadro de confirmación
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar cancelación");
         alert.setHeaderText("¿Desea cancelar la modificación de la poción?");
         alert.setContentText("Si cancela, no se guardarán los cambios.");
 
-        // Esperar la respuesta del usuario
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                // Si el usuario hace clic en Aceptar (OK), cambiar la vista
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("datosPocion.fxml"));
                     Parent nuevaVista = fxmlLoader.load();
@@ -184,7 +181,7 @@ public class controladorModificar {
                     mostrarMensaje("Error", "No se pudo cargar la vista de datos de la poción.", Alert.AlertType.ERROR);
                 }
             } else {
-                // Si el usuario hace clic en Cancelar, no hacer nada
+                // Nothign da nothing
             }
         });
     }

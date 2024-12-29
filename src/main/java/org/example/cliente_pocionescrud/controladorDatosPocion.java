@@ -40,6 +40,11 @@ public class controladorDatosPocion {
 
     @FXML
     public void initialize() throws IOException, ClassNotFoundException {
+        AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
+        if (servidor == null) {
+            mostrarMensaje("Error", "No se pudo conectar al servidor.", Alert.AlertType.ERROR);
+            return;
+        }
         inicializarColumnas();
         mostrarDetallesPocion();
     }
@@ -57,30 +62,13 @@ public class controladorDatosPocion {
     public void mostrarDetallesPocion() throws IOException, ClassNotFoundException {
         labelNombre.setText(pocionSeleccionada.getNombrePocion());
         labelEfecto.setText(pocionSeleccionada.getEfectoPocion());
-
-        switch (pocionSeleccionada.getEscuela()) {
-            case Pociones.Escuela.ABJURACION -> labelEscuela.setText("Abjuracion");
-            case Pociones.Escuela.CONJURACION -> labelEscuela.setText("Conjuracion");
-            case Pociones.Escuela.DIVINACION -> labelEscuela.setText("Divinacion");
-            case Pociones.Escuela.ENCANTAMIENTO -> labelEscuela.setText("Encantamiento");
-            case Pociones.Escuela.EVOCACION -> labelEscuela.setText("Evocacion");
-            case Pociones.Escuela.ILUSION -> labelEscuela.setText("Ilusion");
-            case Pociones.Escuela.NIGROMANCIA -> labelEscuela.setText("Nigromancia");
-            case Pociones.Escuela.TRANSMUTACION -> labelEscuela.setText("Transmutacion");
-            case Pociones.Escuela.UNIVERSAL -> labelEscuela.setText("Universal");
-        }
-
-        switch (pocionSeleccionada.getTamanio()) {
-            case Pociones.Tamanio.GRANDE -> labelTamanio.setText("Grande");
-            case Pociones.Tamanio.MEDIANO -> labelTamanio.setText("Mediano");
-            case Pociones.Tamanio.PEQUEÑO -> labelTamanio.setText("Pequeño");
-        }
+        labelEscuela.setText(pocionSeleccionada.getEscuela().toString());
+        labelTamanio.setText(pocionSeleccionada.getTamanio().toString());
 
         labelPrecio.setText(String.valueOf(pocionSeleccionada.getPrecio()));
 
-
         // Solicitar los ingredientes del servidor
-        AccederServidor servidor = controladorConectar.getAccederServidor();
+        AccederServidor servidor = ConexionServidor.getAccederServidor("localhost", 9069);
         if (servidor != null) {
             Map<Ingredientes, Integer> ingredientes = servidor.obtenerIngredientesPocion(pocionSeleccionada.getIdPocion());
 

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
@@ -34,8 +35,11 @@ public class controladorAcceso {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Conectar.fxml"));
         Parent nuevaVista = fxmlLoader.load();
         Scene escenaActual = ((Node) event.getSource()).getScene();
-        AccederServidor servidor = controladorConectar.getAccederServidor();
-        servidor.cerrarConexion();
+        try {
+            ConexionServidor.cerrarConexion();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         escenaActual.setRoot(nuevaVista);
     }
 }

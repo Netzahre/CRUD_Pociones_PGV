@@ -5,37 +5,41 @@ import org.example.objetos.Pociones;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AccederServidor {
+    private static AccederServidor instance;
     private Socket socket;
-    private ObjectOutputStream  salidaDatos;
+    private ObjectOutputStream salidaDatos;
     private ObjectInputStream entradaDatos;
 
-    // Establecer conexion con el server
-    public AccederServidor(String host, int puerto) throws IOException {
-        // Conexión al servidor en el puerto especificado
+    // Constructor privado para evitar instanciación desde fuera
+    private AccederServidor(String host, int puerto) throws IOException {
         socket = new Socket(host, puerto);
         salidaDatos = new ObjectOutputStream(socket.getOutputStream());
         entradaDatos = new ObjectInputStream(socket.getInputStream());
     }
 
+    // Método para obtener la instancia del servidor (Singleton)
+    public static synchronized AccederServidor getInstance(String host, int puerto) throws IOException {
+        if (instance == null) {
+            instance = new AccederServidor(host, puerto);
+        }
+        return instance;
+    }
+
+
     // Método para enviar mensajes al servidor
     public void enviarMensaje(String mensaje) throws IOException {
         salidaDatos.writeObject(mensaje);
     }
+
     // Método para modificar una poción (enviar la poción y su mapa de ingredientes)
     public void enviarPocionModificada(int idPocion, Pociones pocionModificada, Map<Ingredientes, Integer> ingredientesModificados) throws IOException {
-        // Enviar tipo de operación al servidor
         enviarMensaje("MODIFICAR_POCION");
-        // Enviar el ID de la poción que se va a modificar
         enviarMensaje(String.valueOf(idPocion));
-        // Enviar la poción modificada
         enviarObjeto(pocionModificada);
-        // Enviar el mapa de ingredientes y cantidades modificados
         enviarObjeto(ingredientesModificados);
     }
 
@@ -43,20 +47,31 @@ public class AccederServidor {
     private void enviarObjeto(Object objeto) throws IOException {
         salidaDatos.writeObject(objeto);
     }
+
     // Método para recibir mensajes del servidor
     public String recibirMensaje() throws IOException {
         return entradaDatos.readLine();
     }
 
     // Método para recibir un objeto del servidor
-    public Object recibirObjeto() throws IOException, ClassNotFoundException {
-        return entradaDatos.readObject();
+    public Object recibirObjeto() {
+        try {
+            return entradaDatos.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // Método para obtener la lista de pociones
-    public List<Pociones> obtenerPociones() throws IOException, ClassNotFoundException {
-        enviarMensaje("OBTENER_POCIONES"); // Solicitar la lista de pociones
-        return (List<Pociones>) recibirObjeto(); // Recibir y devolver la lista de pociones
+    public List<Pociones> obtenerPociones() {
+        try {
+            enviarMensaje("OBTENER_POCIONES");
+            return (List<Pociones>) recibirObjeto();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // Crear nueva poción
@@ -67,9 +82,13 @@ public class AccederServidor {
     }
 
     // Método para obtener la lista de ingredientes
-    public List<Ingredientes> obtenerIngredientes() throws IOException, ClassNotFoundException {
-        enviarMensaje("OBTENER_INGREDIENTES"); // Solicitar los ingredientes
-        return (List<Ingredientes>) recibirObjeto(); // Recibir y devolver la lista de ingredientes
+    public List<Ingredientes> obtenerIngredientes()  {
+        try {
+            enviarMensaje("OBTENER_INGREDIENTES");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return (List<Ingredientes>) recibirObjeto();
     }
 
     // Eliminar una poción por ID
@@ -87,8 +106,8 @@ public class AccederServidor {
 
     // Método para enviar los ingredientes de una poción
     public void enviarParametrosDeFiltrado(Map<String, Object> filtros) throws IOException {
-        enviarMensaje("FILTRAR_POCIONES"); // Indicar la operación al servidor
-        enviarObjeto(filtros); // Enviar el mapa de filtros
+        enviarMensaje("FILTRAR_POCIONES");
+        enviarObjeto(filtros);
     }
 
     // **Nuevo** Método para recibir una lista filtrada de pociones
@@ -110,15 +129,18 @@ public class AccederServidor {
     }
 
     // Obtener top 3 pociones caras
-    public List<Object[]> obtenerTop3PocionesCaras() throws IOException, ClassNotFoundException {
+    public List<Pociones> obtenerTop3PocionesCaras(String tamanio) throws IOException, ClassNotFoundException {
         enviarMensaje("TOP_3_POCIONES_CARAS");
-        return (List<Object[]>) recibirObjeto();
+        enviarMensaje(tamanio);
+        return (List<Pociones>) recibirObjeto();
     }
+
     // Obtener cantidad de veces que aparece cada tipo ingrediente
     public List<Object[]> obtenerCantidadVecesIngredientes() throws IOException, ClassNotFoundException {
         enviarMensaje("CANTIDAD_TIPO_INGREDIENTE");
         return (List<Object[]>) recibirObjeto();
     }
+
     // Obtener pociones con mas ingredientes
     public List<Object[]> TOP10PocionesMuchosIngredientes() throws IOException, ClassNotFoundException {
         enviarMensaje("TOP_10_POCIONES_INGREDIENTES");
@@ -137,7 +159,6 @@ public class AccederServidor {
 
     public boolean esServidorLleno() throws IOException {
         String respuesta = recibirMensaje();
-        return respuesta != null && respuesta.contains("LLENO");
+        return respuesta != null && respuesta.contains("lleno");
     }
-
 }
