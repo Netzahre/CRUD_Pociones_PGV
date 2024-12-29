@@ -2,12 +2,14 @@ package org.example.objetos;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="Pociones")
-public class Pociones {
+public class Pociones implements Serializable {
+    private static final long serialVersionUID = 8835260018669484706L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idPocion")
@@ -111,11 +113,5 @@ public class Pociones {
     public void removeReceta(Recetas receta) {
         this.receta.remove(receta);
     }
-
-    public String toStringo(){
-        return(nombrePocion +" - "+efectoPocion);
-    }
-
-
 
 }

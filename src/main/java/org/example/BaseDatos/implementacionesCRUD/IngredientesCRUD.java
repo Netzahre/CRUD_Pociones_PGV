@@ -35,6 +35,7 @@ public class IngredientesCRUD implements IngredientesDAO {
     public List<Ingredientes> listaTodos() {
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         List<Ingredientes> ingredientes = new ArrayList<>();
+        System.out.println("Obteniendo lista de ingredientes");
         try{
             ingredientes = sesion.createQuery("from Ingredientes").list();
         } catch (Exception e){

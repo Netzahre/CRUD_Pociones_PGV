@@ -6,6 +6,7 @@ import org.example.objetos.Ingredientes;
 import org.example.objetos.Pociones;
 import org.example.objetos.Recetas;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,7 @@ public class PocionesCRUD implements PocionesDAO {
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         List<Pociones> pociones = new ArrayList<>();
         try{
+            System.out.println("Obteniendo lista de pociones");
             pociones = sesion.createQuery("from Pociones").list();
         } catch (Exception e){
             e.printStackTrace();
@@ -121,5 +123,48 @@ public class PocionesCRUD implements PocionesDAO {
         return pociones;
     }
 
+    public List<Pociones> obtenerPocionesFiltradas(Map<String, Object> filtros) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            StringBuilder consulta = new StringBuilder("FROM Pociones p WHERE 1=1");
+
+            // Filtros básicos
+            if (filtros.containsKey("nombre")) {
+                consulta.append(" AND p.nombrePocion LIKE :nombre");
+            }
+
+            // Comprobamos si la escuela es "TODAS" para no aplicar el filtro de escuela
+            if (filtros.containsKey("escuela")) {
+                String escuela = filtros.get("escuela").toString().toUpperCase();
+                if (!"TODAS".equals(escuela)) {
+                    consulta.append(" AND p.escuela LIKE :escuela");
+                }
+            }
+
+            Query<Pociones> query = session.createQuery(consulta.toString(), Pociones.class);
+
+            if (filtros.containsKey("nombre")) {
+                query.setParameter("nombre", "%" + filtros.get("nombre") + "%");
+            }
+
+            // Solo se aplica el filtro de escuela si no es "TODAS"
+            if (filtros.containsKey("escuela")) {
+                String escuela = filtros.get("escuela").toString().toUpperCase();
+                if (!"TODAS".equals(escuela)) {
+                    try {
+                        Pociones.Escuela escuelaEnum = Pociones.Escuela.valueOf(escuela);
+                        query.setParameter("escuela", escuelaEnum);
+                    } catch (IllegalArgumentException e) {
+                        // Si la cadena no es un valor válido de la enumeración, manejar la excepción
+                        System.out.println("Escuela no válida: " + filtros.get("escuela"));
+                    }
+                }
+            }
+
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

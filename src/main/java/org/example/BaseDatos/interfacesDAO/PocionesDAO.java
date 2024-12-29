@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface PocionesDAO {
     void insertar(Pociones pocion, Map<Ingredientes, Integer> ingredientes);
-    void actualizar(Pociones pocion);
+    void actualizar(int id,Pociones pocion, Map<Ingredientes, Integer> ingredientes);
     void eliminar(int idPocion);
     Pociones buscarPorID(int idPocion);
     List<Pociones> listaTodos();

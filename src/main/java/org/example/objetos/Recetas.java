@@ -2,9 +2,12 @@ package org.example.objetos;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="Recetas")
-public class Recetas {
+public class Recetas implements Serializable {
+    private static final long serialVersionUID = 8835260018669484706L;
     @EmbeddedId
     private RecetasId id;
 

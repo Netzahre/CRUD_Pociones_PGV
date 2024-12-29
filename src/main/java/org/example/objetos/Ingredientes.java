@@ -3,13 +3,14 @@ package org.example.objetos;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "Ingredientes")
-public class Ingredientes {
-
+public class Ingredientes implements Serializable {
+    private static final long serialVersionUID = 8835260018669484706L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idIngrediente")
@@ -19,7 +20,6 @@ public class Ingredientes {
     @Enumerated(EnumType.STRING)
     @Column(name = "tipoIngrediente", nullable = false)
     private TiposIngrediente tipoIngrediente;
-
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "ingrediente", fetch = FetchType.EAGER)
     List<Recetas> receta = new ArrayList<>();
