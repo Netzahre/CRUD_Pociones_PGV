@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorCrear">
+    <children>
+        <ImageView fitHeight="1034.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@fondo.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="310.0" fitWidth="277.0" layoutX="502.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@logo.png" />
+            </image>
+        </ImageView>
+
+        <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0" />
+        <Button layoutX="95.0" layoutY="33.0" mnemonicParsing="false" onAction="#atras" prefHeight="88.0" prefWidth="244.0" styleClass="boton" text="Atras">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Button>
+        <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="260.0" prefHeight="757.0" prefWidth="1098.0" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="260.0">
+            <children>
+                <TextField fx:id="NombrePocionTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" promptText="Nombre de la pocion" />
+                <TextField fx:id="EfectoPocionTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" promptText="Efecto de la pocion" />
+            <ComboBox fx:id="escuelaComboBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="650.0" />
+            <ComboBox fx:id="tamanoComboBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="650.0" />
+            <TextField fx:id="precioPocion" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="650.0" promptText="Precio (Formato 100.00)" />
+                <Label text="Lista de ingredientes" textFill="WHITE">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Label>
+                <TableView fx:id="tableViewIngredientes" editable="true" prefHeight="365.0" prefWidth="1098.0" tableMenuButtonVisible="true">
+                    <columns>
+                        <TableColumn fx:id="columnaIngrediente" editable="false" prefWidth="864.0" text="Ingrediente" />
+                        <TableColumn fx:id="columnaCantidad" prefWidth="233.0" text="Cantidad" />
+                    </columns>
+                </TableView>
+            </children>
+            <padding>
+                <Insets top="5.0" />
+            </padding>
+        </VBox>
+        <Button layoutX="949.0" layoutY="33.0" mnemonicParsing="false" onAction="#confirmarCrear" prefHeight="102.0" prefWidth="244.0" styleClass="boton" text="Aceptar">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Button>
+    </children>
+</AnchorPane>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorVerPociones">
+    <children>
+        <ImageView fitHeight="1034.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@fondo.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="333.0" fitWidth="333.0" layoutX="474.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@logo.png" />
+            </image>
+        </ImageView>
+
+        <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0" />
+        <HBox layoutX="90.0" layoutY="33.0" spacing="600.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#volverAtras" prefHeight="59.0" prefWidth="251.0" styleClass="boton" text="Atras">
+                    <font>
+                        <Font name="System Bold" size="48.0" />
+                    </font>
+                </Button>
+                <Button fx:id="botonCrearPocion" mnemonicParsing="false" onAction="#crearPocion" prefHeight="102.0" prefWidth="251.0" styleClass="boton" text="Añadir">
+                    <font>
+                        <Font name="System Bold" size="48.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+        <TableView fx:id="tablaPociones" layoutX="-3.0" layoutY="519.0" prefHeight="505.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="519.0">
+            <columns>
+                <TableColumn fx:id="columnaId" prefWidth="91.0" text="Id" />
+                <TableColumn fx:id="columnaNombre" prefWidth="280.0" text="Nombre" />
+                <TableColumn fx:id="columnaEfecto" prefWidth="289.0" text="Efecto" />
+                <TableColumn fx:id="columnaEscuela" prefWidth="212.0" text="Escuela" />
+                <TableColumn fx:id="columnaTamanio" minWidth="0.0" prefWidth="160.0" text="Tamaño" />
+                <TableColumn fx:id="columnaPrecio" prefWidth="247.0" text="Precio" />
+            </columns>
+        </TableView>
+        <Label layoutX="97.0" layoutY="261.0" prefHeight="143.0" prefWidth="367.0" text="Para añadir una pocion pulse añadir&#10;Para ver los detalles de una pocion, haga click en ella&#10;Para volver atras, pulse atras&#10;Para filtrar, rellene/Elija datos y pulse filtrar&#10;" textFill="WHITE" wrapText="true">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Button layoutX="1017.0" layoutY="466.0" mnemonicParsing="false" onAction="#filtrarPociones" prefHeight="27.0" prefWidth="175.0" styleClass="boton" text="Filtrar">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <Label layoutX="97.0" layoutY="200.0" text="Pociones&#10;" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" layoutX="90.0" layoutY="468.0" spacing="10.0">
+            <children>
+                <Label text="Nombre" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="nombreFiltro" prefHeight="34.0" prefWidth="214.0" promptText="Nombre" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" layoutX="394.0" layoutY="468.0" spacing="10.0">
+            <children>
+                <Label text="Escuela" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="escuelaFiltro" prefHeight="35.0" prefWidth="204.0" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" layoutX="700.0" layoutY="468.0" spacing="10.0">
+            <children>
+                <Label text="Tamaño" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="tamanioFiltro" prefHeight="35.0" prefWidth="204.0" />
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

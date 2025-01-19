@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorConectar">
+    <children>
+        <ImageView fitHeight="1034.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@fondo.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="561.0" fitWidth="553.0" layoutX="364.0" layoutY="-13.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@logo.png" />
+            </image>
+        </ImageView>
+
+        <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0" />
+        <VBox layoutX="341.0" layoutY="597.0" spacing="15.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#Conectar" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Conectarse">
+                    <font>
+                        <Font name="System Bold" size="64.0" />
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#salir" prefHeight="135.0" prefWidth="600.0" styleClass="boton" text="Salir">
+                    <font>
+                        <Font name="System Bold" size="64.0" />
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

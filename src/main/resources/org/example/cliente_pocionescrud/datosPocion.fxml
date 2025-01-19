@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: #370d54;" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorDatosPocion">
+    <children>
+        <ImageView fitHeight="1034.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@fondo.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="310.0" fitWidth="277.0" layoutX="502.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@logo.png" />
+            </image>
+        </ImageView>
+
+        <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0" />
+        <Button layoutX="95.0" layoutY="33.0" mnemonicParsing="false" onAction="#salir" prefHeight="88.0" prefWidth="244.0" styleClass="boton" text="Atras">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Button>
+        <VBox alignment="TOP_CENTER" layoutX="95.0" layoutY="260.0" prefHeight="757.0" prefWidth="1098.0">
+            <children>
+                <Label fx:id="labelNombre" text="NombrePocion" textFill="WHITE">
+                    <font>
+                        <Font size="48.0" />
+                    </font>
+                </Label>
+                <Label fx:id="labelEfecto" text="Efecto" textFill="WHITE">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Label>
+                <Label fx:id="labelEscuela" text="Escuela" textFill="WHITE">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Label>
+                <Label fx:id="labelTamanio" text="Tamaño" textFill="WHITE">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Label>
+                <Label fx:id="labelPrecio" text="Precio" textFill="WHITE">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Label>
+                <Label text="Lista de ingredientes" textFill="WHITE">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Label>
+                <TableView fx:id="tablaIngredientes" prefHeight="412.0" prefWidth="1098.0">
+                    <columns>
+                        <TableColumn fx:id="columnaNombre" prefWidth="912.0" text="Ingrediente" />
+                        <TableColumn fx:id="columnaCantidad" minWidth="0.0" prefWidth="185.0" text="Cantidad" />
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+        <Button fx:id="botonModificar" layoutX="897.0" layoutY="33.0" mnemonicParsing="false" onAction="#abrirModificar" prefHeight="102.0" prefWidth="296.0" styleClass="boton" text="Modificar">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Button>
+        <Button fx:id="botonBorrar" layoutX="897.0" layoutY="154.0" mnemonicParsing="false" onAction="#borrarPocion" prefHeight="102.0" prefWidth="296.0" styleClass="boton" text="Borrar">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Button>
+    </children>
+</AnchorPane>

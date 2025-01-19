@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1280.0" stylesheets="@../../../css/diseno.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cliente_pocionescrud.controladorVerConsultas">
+    <children>
+        <ImageView fitHeight="1034.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@fondo.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="333.0" fitWidth="333.0" layoutX="474.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@logo.png" />
+            </image>
+        </ImageView>
+
+        <Label fx:id="welcomeText" layoutX="791.0" layoutY="84.0" />
+        <Button layoutX="131.0" layoutY="52.0" mnemonicParsing="false" onAction="#atras" prefHeight="59.0" prefWidth="251.0" styleClass="boton" text="Atras">
+            <font>
+                <Font name="System Bold" size="48.0" />
+            </font>
+        </Button>
+        <TableView fx:id="tablaingredientesmas3pociones" layoutX="63.0" layoutY="557.0" prefHeight="421.0" prefWidth="411.0">
+            <columns>
+                <TableColumn fx:id="columnasMas3Ingredientes" prefWidth="204.0" text="Ingrediente" />
+                <TableColumn fx:id="columnasMas3Cantidad" prefWidth="206.0" text="Cant. pociones usado en" />
+            </columns>
+        </TableView>
+        <TableView fx:id="tablacantidadIngredientesEscuelas" layoutX="494.0" layoutY="557.0" prefHeight="421.0" prefWidth="348.0">
+            <columns>
+                <TableColumn fx:id="columnaCantidadIngredientesEscuela" prefWidth="173.0" text="Escuela" />
+                <TableColumn fx:id="columnaCantidadIngredientesEscuelaCantidad" prefWidth="174.0" text="Cantidad de ingredientes" />
+            </columns>
+        </TableView>
+        <TableView fx:id="tablatop3PocionesCaras" layoutX="63.0" layoutY="309.0" prefHeight="186.0" prefWidth="411.0">
+            <columns>
+                <TableColumn fx:id="columnaTop3Tamanio" prefWidth="251.0" text="Pocion" />
+                <TableColumn fx:id="columnaTop3Precio" prefWidth="159.0" text="Precio" />
+            </columns>
+        </TableView>
+        <TableView fx:id="tablacantidadVecesIngrediente" layoutX="874.0" layoutY="306.0" prefHeight="192.0" prefWidth="340.0">
+            <columns>
+                <TableColumn fx:id="columnaCantidadVecesIngredienteNombre" prefWidth="211.0" text="Ingrediente" />
+                <TableColumn fx:id="columnaCantidadVecesIngredienteCantidad" prefWidth="128.0" text="Cantidad" />
+            </columns>
+        </TableView>
+        <TableView fx:id="tablatop10pocionesMuchosIngredientes" layoutX="874.0" layoutY="557.0" prefHeight="421.0" prefWidth="340.0">
+            <columns>
+                <TableColumn fx:id="columnatop10MuchosIngredientesPocion" prefWidth="180.0" text="Pocion" />
+                <TableColumn fx:id="columnaTop10MuchosIngredientesCantidad" prefWidth="160.0" text="Cantidad ingredientes" />
+            </columns>
+        </TableView>
+        <Label layoutX="63.0" layoutY="498.0" prefHeight="57.0" prefWidth="411.0" text="TOP 10 Ingredientes que se usan en más de 3 pociones diferentes" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+        <Label layoutX="63.0" layoutY="249.0" prefHeight="28.0" prefWidth="411.0" text="Pociones mas caras por tamaño" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+        <Label layoutX="494.0" layoutY="498.0" prefHeight="57.0" prefWidth="348.0" text="Cantidad de ingredientes usados por cada escuela" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+        <Label layoutX="874.0" layoutY="498.0" prefHeight="57.0" prefWidth="348.0" text="top 10 pociones con mayor cantidad de ingredientes" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+        <Label layoutX="874.0" layoutY="249.0" prefHeight="57.0" prefWidth="348.0" text="Cantidad  de veces que se utiliza cada tipo de ingrediente" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="19.0" />
+            </font>
+        </Label>
+        <Label layoutX="526.0" layoutY="290.0" text="Consultas fijas" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="System Bold" size="42.0" />
+            </font>
+        </Label>
+        <Label layoutX="526.0" layoutY="345.0" prefHeight="114.0" prefWidth="284.0" text="Vea la informacion mas relevante sin tener que hacer un solo click" textFill="WHITE" wrapText="true">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="filtroTamanio" layoutX="63.0" layoutY="277.0" prefHeight="27.0" prefWidth="237.0" />
+    </children>
+</AnchorPane>
